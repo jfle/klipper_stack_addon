@@ -1,5 +1,5 @@
 Flask==2.0.2
-moonraker==0.6.0
-pyserial==3.5
+moonraker==0.9.3  # Latest available version
+pyserial==3.4    # Version required by moonraker
 websocket-client==1.2.1
 python-socketio==5.3.0
