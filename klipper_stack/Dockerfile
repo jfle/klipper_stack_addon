@@ -1,5 +1,5 @@
-# Use a Python base image
-FROM python:3.8-slim
+# Stage 1: Build dependencies
+FROM python:3.8-slim AS builder
 
 # Set environment variables to avoid prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
@@ -26,8 +26,4 @@ COPY . /home/klipper/
 RUN pip install --upgrade pip
 RUN pip install -r /home/klipper/requirements.txt
 
-# Expose any necessary ports (adjust these as needed)
-EXPOSE 7125
-
-# Set the command to run the necessary services (like Klipper and Moonraker)
-CMD ["python3", "/home/klipper/moonraker/main.py"]
+# Stage 2: Runtime image
