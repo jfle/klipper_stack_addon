@@ -27,3 +27,17 @@ RUN pip install --upgrade pip
 RUN pip install -r /home/klipper/requirements.txt
 
 # Stage 2: Runtime image
+FROM python:3.8-slim
+
+# Set the working directory for runtime
+WORKDIR /home/klipper
+
+# Copy over the necessary files from the build stage
+COPY --from=builder /home/klipper /home/klipper
+
+# Expose necessary ports
+EXPOSE 7125
+
+# Set the entrypoint for the container
+CMD ["python3", "/home/klipper/moonraker/main.py"]
+
