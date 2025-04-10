@@ -1,37 +1,33 @@
-FROM debian:bullseye
+# Use a Python base image
+FROM python:3.8-slim
 
-# Install dependencies
-RUN apt-get update && \
-    apt-get install -y sudo git python3 python3-pip nginx
+# Set environment variables to avoid prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Add a non-root user
-RUN useradd -m klipper && \
-    usermod -aG sudo klipper && \
-    echo 'klipper ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# Install system dependencies required for the application
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    python-dev \
+    python3-dev \
+    python3-pip \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Switch to the non-root user
-USER klipper
+# Create and set the working directory
 WORKDIR /home/klipper
 
-# Clone Klipper, Moonraker, and Mainsail
-RUN git clone https://github.com/Klipper3d/klipper.git && \
-    git clone https://github.com/Arksine/moonraker.git && \
-    git clone https://github.com/mainsail-crew/mainsail.git
+# Copy the current project files into the container's working directory
+COPY . /home/klipper/
 
-# Install Python dependencies for Klipper and Moonraker
-RUN pip3 install -r klipper/scripts/klippy-requirements.txt && \
-    pip3 install -r moonraker/requirements.txt
+# Upgrade pip and install dependencies from requirements.txt
+RUN pip install --upgrade pip
+RUN pip install -r /home/klipper/requirements.txt
 
-# Set up Mainsail
-RUN mkdir -p /var/www/mainsail && \
-    cp -r mainsail/* /var/www/mainsail/
+# Expose any necessary ports (adjust these as needed)
+EXPOSE 7125
 
-# Expose ports
-EXPOSE 80 7125
-
-# Copy the run script
-COPY run.sh /home/klipper/run.sh
-RUN chmod +x /home/klipper/run.sh
-
-# Start the services
-CMD ["/home/klipper/run.sh"]
+# Set the command to run the necessary services (like Klipper and Moonraker)
+CMD ["python3", "/home/klipper/moonraker/main.py"]
