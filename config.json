@@ -1,0 +1,19 @@
+{
+  "name": "Klipper Stack",
+  "version": "1.0.0",
+  "slug": "klipper_stack",
+  "description": "Klipper, Moonraker, and Mainsail in one add-on.",
+  "arch": ["aarch64", "amd64", "armv7"],
+  "startup": "application",
+  "boot": "auto",
+  "ports": {
+    "7125/tcp": 7125,
+    "80/tcp": 80
+  },
+  "devices": [
+    "/dev/ttyUSB0:/dev/ttyUSB0"
+  ],
+  "options": {},
+  "schema": {},
+  "full_access": true
+}
