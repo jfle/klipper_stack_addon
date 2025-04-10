@@ -11,7 +11,7 @@
     "80/tcp": 80
   },
   "devices": [
-    "/dev/ttyUSB0:/dev/ttyUSB0"
+    "/dev/serial/by-id/usb-Klipper_stm32f103xe_31FFD1054242363120762557-if00"
   ],
   "options": {},
   "schema": {},
